@@ -1,50 +1,80 @@
-# Welcome to your Expo app 👋
+# Study Topic Randomizer
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform application for randomly selecting study topics to focus on each day. Built with React Native and Expo.
 
-## Get started
+![Study Topic Randomizer](./assets/images/icon.png)
 
-1. Install dependencies
+## Features
 
+- **Random Topic Selection:** Randomly select topics to study from different categories
+- **Customizable Topic Lists:** Add, remove, and manage your own study topics
+- **Study History:** Keep track of previously selected topics with timestamps
+- **Local Storage:** All your data is saved to your device's local storage
+- **Dark/Light Mode Support:** Automatic system theme detection with tailored UI
+- **Cross-Platform:** Works on iOS, Android, and Web
+
+## Screenshots
+
+*[Insert screenshots here]*
+
+## Technologies Used
+
+- [React Native](https://reactnative.dev/) - Mobile framework
+- [Expo](https://expo.dev/) - Development platform
+- [React Navigation](https://reactnavigation.org/) - Navigation library
+- [Expo Router](https://docs.expo.dev/router/introduction/) - File-based routing
+- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) - Animations
+- [LocalStorage](https://reactnative.dev/docs/asyncstorage) - For persisting data
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/CruiseDevice/Study-Topic-Randomizer.git
+   cd Study-Topic-Randomizer
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server:
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Usage
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+1. **Select a Category:** Choose between System Design topics or Interview topics
+2. **Get a Random Topic:** Click the "Select Random Topic" button to get your study focus for the day
+3. **Add Custom Topics:** Add your own topics to either category
+4. **Remove Topics:** Remove topics you've mastered or don't want to study
+5. **Track Progress:** View your study history to see what you've been focusing on
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Project Structure
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+study-topic-randomizer/
+├── app/                   # Main application code with file-based routing
+│   ├── _layout.tsx        # Root layout configuration
+│   ├── (tabs)/            # Tab navigator screens
+│   └── +not-found.tsx     # 404 page
+├── assets/                # Images, fonts, and other static assets
+├── components/            # Reusable UI components
+│   ├── ui/                # UI primitives
+│   └── ...                # Other components
+├── constants/             # App constants and theme definitions
+└── hooks/                 # Custom React hooks
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Customization
 
-## Learn more
+### Adding New Categories
 
-To learn more about developing your project with Expo, look at the following resources:
+To add a new category of study topics:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. Update the state in `StudyTopicRandomizer.tsx` to include a new array for your category
+2. Add a new tab trigger in the TabsList component
+3. Create a new TabsContent component for the category
+4. Add the necessary state handling for your new category
