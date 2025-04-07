@@ -20,13 +20,18 @@ const StudyTopicRandomizer = () => {
 
   const [activeTab, setActiveTab] = useState('system-design');
   const [systemDesignTopics, setSystemDesignTopics] = useState<string[]>([]);
+  const [interviewTopics, setInterviewTopics] = useState<string[]>([]);
+
+  const [selectedSysteDesignTopic, setSelectedSystemDesignTopic] = useState('');
+  const [selectedInterviewTopic, setSelectedInterviewTopic] = useState('');
 
   // load data from AsyncStorage on component mount
   useEffect(() => {
     const loadData = async () => {
       try{
         const storedSystemDesignTopics = await AsyncStorage.getItem('systemDesignTopics');
-  
+        const storedInterviewTopics = await AsyncStorage.getItem('interviewTopics');
+
         // set default topics if none are selected
         if (storedSystemDesignTopics) {
           setSystemDesignTopics(JSON.parse(storedSystemDesignTopics));
@@ -37,6 +42,16 @@ const StudyTopicRandomizer = () => {
             'Data Partitioning', 'CAP Theorem', 'Consistent Hashing'
           ]);
         }
+
+        if (storedInterviewTopics) {
+          setInterviewTopics(JSON.parse(storedInterviewTopics));
+        } else {
+          setInterviewTopics([
+            'Data Structures', 'Algorithms', 'Big O Notation', 'Dynamic Programming',
+            'Tree Traversal', 'Graph Algorithms', 'Sorting Algorithms', 'Binary Search',
+            'OOP Concepts', 'Networking Basics', 'Operating Systems'
+          ]);
+        }
       } catch (error) {
         console.error('Error loading data from AyncStorage: ', error);
       } 
@@ -45,6 +60,21 @@ const StudyTopicRandomizer = () => {
     loadData();
   }, [])
 
+  const selectRandomTopic = () => {
+    if (activeTab === 'system-design') {
+      if(systemDesignTopics.length === 0) return;
+      
+      const randomIndex = Math.floor(Math.random() * systemDesignTopics.length);
+      const topic = systemDesignTopics[randomIndex];
+      setSelectedSystemDesignTopic(topic);
+    } else {
+      if(interviewTopics.length === 0) return;
+      
+      const randomIndex = Math.floor(Math.random() * interviewTopics.length);
+      const topic = interviewTopics[randomIndex];
+      setSelectedInterviewTopic(topic);
+    }
+  }
   return (
     <ThemedView style={styles.container}>
       <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'}/>
@@ -94,12 +124,22 @@ const StudyTopicRandomizer = () => {
             {activeTab === 'system-design' ? (
               <>
                 <View style={styles.topicSection}>
-                  <ThemedText style={styles.sectionTitle}>Today's System Design Topic:</ThemedText>
-                  <ThemedView style={styles.emptyTopic}>
-                    <ThemedText style={styles.emptyTopicText}>
-                      Click "Select Random Topic" to get today's focus
-                    </ThemedText>
-                  </ThemedView>
+                  <ThemedText type="subtitle" style={styles.sectionTitle}>Today's System Design Topic:</ThemedText>
+                  {selectedSysteDesignTopic ? (
+                    <ThemedView
+                      style={[styles.selectedTopic, {backgroundColor: colorScheme === 'dark' ? '#1a3a5a' : '#e6f0ff'}]}
+                      lightColor="#e6f0ff"
+                      darkColor="1a3a5a"
+                    >
+                      <ThemedText type="defaultSemiBold" style={styles.selectedTopicText}>{selectedSysteDesignTopic}</ThemedText>
+                    </ThemedView>
+                  ) : (
+                    <ThemedView style={styles.emptyTopic}>
+                      <ThemedText style={styles.emptyTopicText}>
+                        Click "Select Random Topic" to get today's focus
+                      </ThemedText>
+                    </ThemedView>
+                  )}
                 </View>
 
                 <View style={styles.addTopicSection}>
@@ -148,12 +188,24 @@ const StudyTopicRandomizer = () => {
             ) : (
               <>
                 <View style={styles.topicSection}>
-                  <ThemedText>Today's Interview Topic:</ThemedText>
-                  <ThemedView style={styles.emptyTopic}>
-                    <ThemedText style={styles.emptyTopicText}>
-                      Click "Select Random Topic" to get today's focus
-                    </ThemedText>
-                  </ThemedView>
+                  <ThemedText type="subtitle" style={styles.sectionTitle}>Today's Interview Topic:</ThemedText>
+                  {selectedInterviewTopic ? (
+                    <ThemedView
+                      style={[styles.selectedTopic, {backgroundColor: colorScheme === 'dark' ? '#1a3a2a' : '#e6f7e6'}]}
+                      lightColor="#e6f7e6"
+                      darkColor="#1a3a2a"
+                    >
+                      <ThemedText type="defaultSemiBold" style={styles.selectedTopicText}>
+                        {selectedInterviewTopic}
+                      </ThemedText>
+                    </ThemedView>
+                  ) : (
+                    <ThemedView style={styles.emptyTopic}>
+                      <ThemedText style={styles.emptyTopicText}>
+                        Click "Select Random Topic" to get today's focus
+                      </ThemedText>
+                    </ThemedView>
+                  )}
                 </View>
                 <View style={styles.addTopicSection}>
                   <TextInput 
@@ -178,9 +230,33 @@ const StudyTopicRandomizer = () => {
                       <Text style={styles.addButtonText}>Add</Text>
                     </TouchableOpacity>
                 </View>
-                
+                <View style={styles.tagContainer}>
+                  <View style={styles.tagWrapper}>
+                    {interviewTopics.map((topic, index) => (
+                      <ThemedView
+                        key={index}
+                        style={styles.tag}
+                        lightColor="#f5f5f5"
+                        darkColor="#333"
+                      >
+                        <ThemedText style={styles.tagText}>{topic}</ThemedText>
+                        <TouchableOpacity
+                          style={styles.removeButton}
+                        >
+                          <ThemedText style={[styles.removeButtonText, {color: colorScheme === 'dark' ? '#aaa' : '#999'}]}>x</ThemedText>
+                        </TouchableOpacity>
+                      </ThemedView>
+                    ))}
+                  </View>
+                </View>
               </>
             )}
+            <TouchableOpacity
+              style={[styles.randomButton, {backgroundColor: themeColors.tint}]}
+              onPress={selectRandomTopic}
+            >
+              <Text>Select Random Topic</Text>
+            </TouchableOpacity>
           </ScrollView>
         </ThemedView>
       </ThemedView>
@@ -289,6 +365,20 @@ const styles = StyleSheet.create({
   },
   removeButtonText: {
     fontSize: 16,
+  },
+  randomButton: {
+    padding: 12,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  selectedTopic: {
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  selectedTopicText: {
+    fontSize: 18
   }
 })
 
