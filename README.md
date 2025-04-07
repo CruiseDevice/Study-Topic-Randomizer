@@ -2,7 +2,7 @@
 
 A cross-platform application for randomly selecting study topics to focus on each day. Built with React Native and Expo.
 
-![Study Topic Randomizer](./assets/images/icon.png)
+![Study Topic Randomizer](./assets/images/react-logo.png)
 
 ## Features
 
