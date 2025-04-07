@@ -15,7 +15,7 @@ A cross-platform application for randomly selecting study topics to focus on eac
 
 ## Screenshots
 
-*[Insert screenshots here]*
+![Study Topic Randomizer](./assets/images/interface.png )
 
 ## Technologies Used
 
